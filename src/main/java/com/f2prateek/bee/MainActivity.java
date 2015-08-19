@@ -12,6 +12,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
   @Bind(R.id.editor) EditText editor;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     super.onResume();
     editorTextChanges = RxTextView.textChanges(editor) //
         .skip(1) // First event is a blank string "".
-        .debounce(400, TimeUnit.MILLISECONDS) //
+        .debounce(400, TimeUnit.MILLISECONDS, Schedulers.computation()) //
         .map(new Func1<CharSequence, String>() {
           @Override public String call(CharSequence text) {
             return Bee.spell(text);
